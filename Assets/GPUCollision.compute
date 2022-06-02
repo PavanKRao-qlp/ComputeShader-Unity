@@ -1,0 +1,20 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CheckCollision
+struct Collider
+{
+    float3 pos;
+    float range;
+};
+RWStructuredBuffer<Collider> Colliders;
+RWStructuredBuffer<float> Collided;
+// if we think computer shader as sending instruction to multiple computers
+// shader.dispatch(ix, 3,3,1) is saying we need 3x3x1 = 9 computer
+[numthreads(1, 1, 1)] //number threads(2,2,2) is saying in each of the computer we need 2x2x2 = 8 threads 
+void CheckCollision(uint3 id : SV_DispatchThreadID)
+{
+    float dist = sqrt(pow(Colliders[id.x].pos.x - Colliders[id.x + 1].pos.x, 2) + pow(Colliders[id.x].pos.y - Colliders[id.x + 1].pos.y, 2) + pow(Colliders[id.x].pos.z - Colliders[id.x + 1].pos.z, 2));
+    float result = 0;
+    if (dist <= Colliders[id.x].range + Colliders[id.x + 1].range)
+        result = 1;
+    Collided[id.x] = result;
+}
