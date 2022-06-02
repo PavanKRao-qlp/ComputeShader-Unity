@@ -1,0 +1,27 @@
+name: GetLicense
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "RequestLicense"
+  RequestLicense:
+    name : "Get Unity Licence"
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Request manual activation file
+      - name: Request manual activation file
+        id: getManualLicenseFile
+        uses: game-ci/unity-request-activation-file@v3
+      # Upload artifact (Unity_v20XX.X.XXXX.alf)
+      - name: Expose as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
