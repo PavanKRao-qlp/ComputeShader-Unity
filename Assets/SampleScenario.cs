@@ -35,6 +35,7 @@ public class SampleScenario : MonoBehaviour
         collisionBuffer.GetData(collisionData);
         GameObjectA.material.color = collisionData[0] == 1 ? Color.red : Color.white;
         GameObjectB.material.color = collisionData[0] == 1 ? Color.red : Color.white;
+
     }
 
     private void OnDestroy()
